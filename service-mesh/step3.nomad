@@ -7,7 +7,7 @@ job "countdash" {
     }
 
     service {
-      name = "counter-api"
+      name = "count-api"
       port = "9001"
 
       connect{
@@ -62,6 +62,10 @@ job "countdash" {
     task "dashboard" {
       driver = "docker"
 
+      env {
+        COUNTING_SERVICE_URL = "http://${NOMAD_UPSTREAM_ADDR_count_api}"
+      }
+
       config {
         image = "hashicorpnomad/counter-dashboard:v1"
       }
@@ -73,3 +77,4 @@ job "countdash" {
     }
   }
 }
+

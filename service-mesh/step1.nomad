@@ -27,7 +27,7 @@ job "countdash" {
       }
 
       service {
-        name = "counter-api"
+        name = "count-api"
         port = "http"
       }
     }
@@ -59,7 +59,7 @@ job "countdash" {
       }
 
       service {
-        name = "counter-dashboard"
+        name = "count-dashboard"
         port = "http"
       }
     }

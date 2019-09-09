@@ -10,7 +10,7 @@ job "countdash" {
     }
 
     service {
-      name = "counter-api"
+      name = "count-api"
       port = "http"
     }
 
@@ -61,7 +61,7 @@ job "countdash" {
 
       template {
       data = <<EOH
-{{ with service "counter-api" }}
+{{ with service "count-api" }}
 {{ with index . 0 }}
 COUNTING_SERVICE_URL="http://{{ .Address }}:{{ .Port }}"{{ end }}{{ end }}
 EOH
