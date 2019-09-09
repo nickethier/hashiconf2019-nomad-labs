@@ -1,0 +1,67 @@
+job "countdash" {
+  datacenters = ["dc1"]
+
+  group "countdash" {
+    constraint {
+      attribute = "${node.unique.name}"
+      value = "one"
+    }
+
+    task "web" {
+      driver = "docker"
+
+      config {
+        image = "hashicorpnomad/counter-api:v1"
+        port_map {
+          "http" = 9001
+        }
+      }
+
+      resources {
+        cpu    = 100
+        memory = 64
+
+        network {
+          port "http" {}
+        }
+      }
+
+      service {
+        name = "counter-api"
+        port = "http"
+      }
+    }
+
+    task "dashboard" {
+      driver = "docker"
+
+      env {
+        COUNTING_SERVICE_URL = "http://${NOMAD_ADDR_web_http}"
+      }
+
+      config {
+        image = "hashicorpnomad/counter-dashboard:v1"
+
+        port_map {
+          "http" = 9002
+        }
+      }
+
+      resources {
+        cpu    = 100
+        memory = 64
+
+        network {
+          port "http" {
+            static = 8080
+          }
+        }
+      }
+
+      service {
+        name = "counter-dashboard"
+        port = "http"
+      }
+    }
+  }
+}
